@@ -9,9 +9,13 @@
 </head>
 <body>
     <h1>WebSocket Notification Example</h1>
+    
+    <!-- The div where notifications will be displayed -->
     <div id="notificationDiv"></div>
 
-    <script>
+
+    <!-- Your custom JavaScript code -->
+    <script th:inline="javascript">
         var stompClient = null;
 
         $(document).ready(function () {
@@ -19,7 +23,7 @@
         });
 
         function connect() {
-            var socket = new SockJS('/ws');
+            var socket = new SockJS('https://' + window.location.hostname + ':8080/ws');
             stompClient = Stomp.over(socket);
             stompClient.connect({}, function (frame) {
                 console.log('Connected: ' + frame);
@@ -31,7 +35,13 @@
         }
 
         function updateNotification(messegeDTO) {
-            $('#notificationDiv').text('Message ID: ' + messegeDTO.msgId + ', Content: ' + messegeDTO.content + ', Date: ' + messegeDTO.localDate);
+            // Update your UI with the received notification
+            var notificationContent = 'Message ID: ' + messegeDTO.msgId +
+                ', Content: ' + messegeDTO.content +
+                ', Date: ' + messegeDTO.localDate;
+
+            // For simplicity, appending the notification content to the div
+            $('#notificationDiv').append('<p>' + notificationContent + '</p>');
         }
     </script>
 </body>
